@@ -284,10 +284,13 @@ html, body {
     font-size: 1.2rem;
   }
 
-  /* Remove explicit break tags on smaller screens for natural text flow */
-  .hero-text h1 br {
-    display: none;
-  }
+.hero-text h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 3.2vw, 4.2rem);
+  font-weight: 100;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
 }
 
 @media (max-width: 480px) {
