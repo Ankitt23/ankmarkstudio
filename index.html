@@ -1,65 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ANKMARK STUDIO</title>
+<style>
+  :root{
+    --text-dark: #1a1a1a;
+    --text-muted: #9a9a9a;
+    --pill-bg: rgba(233,233,233,0.9);
+    --pill-active-bg: #ffffff;
+  }
 
-<link rel="stylesheet" href="style.css">
+  *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+  }
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  html, body{
+    height:100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:#0a0a0a;
+  }
 
+  /* ===================== NAVBAR (sticky, transparent) ===================== */
+  .site-header{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index: 100;
+    padding: 22px 16px;
+    padding-top: calc(22px + env(safe-area-inset-top));
+  }
+
+  /* When scrolled, navbar gets a solid/blurred backing so it stays legible */
+  .site-header.scrolled{
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 14px 16px;
+    padding-top: calc(14px + env(safe-area-inset-top));
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  .brand{
+    text-align:center;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    margin-bottom: 18px;
+    transition: font-size 0.35s ease, margin-bottom 0.35s ease;
+  }
+
+  .site-header.scrolled .brand{
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .navbar{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    flex-wrap: nowrap;
+    max-width: 900px;
+    margin: 0 auto;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding: 4px;
+  }
+  .navbar::-webkit-scrollbar{
+    display:none;
+  }
+
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    white-space: nowrap;
+    background: #c1ff72;
+    color: #0b0b0b;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .nav-item:hover{
+    background: var(--pill-active-bg);
+    color: var(--text-dark);
+  }
+
+  .nav-item.active{
+    background: var(--pill-active-bg);
+    color: var(--text-dark);
+  }
+
+  /* ===================== Responsive breakpoints ===================== */
+  @media (max-width: 1024px){
+    .navbar{ max-width: 720px; }
+  }
+
+  @media (max-width: 768px){
+    .brand{ font-size: 21px; }
+    .nav-item{ padding: 11px 18px; font-size: 14px; }
+  }
+
+  @media (max-width: 200px){
+    .brand{ font-size: 19px; }
+    .nav-item{ padding: 10px 16px; font-size: 13px; }
+    .navbar{ gap: 8px; justify-content:flex-start; }
+  }
+
+  @media (max-width: 480px){
+    .site-header{ padding: 18px 12px; padding-top: calc(18px + env(safe-area-inset-top)); }
+    .brand{ font-size: 17px; margin-bottom: 14px; }
+    .navbar{ gap: 6px; }
+    .nav-item{ padding: 9px 14px; font-size: 12.5px; }
+  }
+
+  @media (max-width: 400px){
+    .nav-item{ padding: 9px 13px; font-size: 12px; }
+  }
+
+  @media (max-width: 340px){
+    .site-header{ padding: 14px 10px; padding-top: calc(14px + env(safe-area-inset-top)); }
+    .brand{ font-size: 15px; margin-bottom: 10px; }
+    .nav-item{ padding: 8px 11px; font-size: 11px; gap: 6px; }
+  }
+
+  @media (orientation: landscape) and (max-height: 480px){
+    .site-header{ padding: 10px 16px; padding-top: calc(10px + env(safe-area-inset-top)); }
+    .brand{ font-size: 16px; margin-bottom: 8px; }
+    .nav-item{ padding: 7px 14px; font-size: 12px; }
+  }
+
+  /* ===================== HERO SECTION (home page video bg) ===================== */
+  .hero{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .hero video{
+    position:absolute;
+    top:50%;
+    left:50%;
+    min-width:100%;
+    min-height:100%;
+    width:auto;
+    height:auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .hero-overlay{
+    position:absolute;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.35);
+    z-index: 2;
+  }
+
+    .home-content{
+    position: relative;
+    z-index: 3;
+    text-align:center;
+    padding: 0 20px;
+  }
+
+  .home-title{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 50px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    margin-bottom: 14px;
+  }
+
+  .home-desc{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: 0.4px;
+    color: rgba(255,255,255,0.85);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  
+    /* ===================== Responsive breakpoints (home content) ===================== */
+  @media (max-width: 1024px){
+    .home-title{ font-size: 42px; }
+    .home-desc{ font-size: 22px; }
+  }
+
+  @media (max-width: 768px){
+    .home-title{ font-size: 34px; }
+    .home-desc{ font-size: 19px; }
+  }
+
+  @media (max-width: 200px){
+    .home-title{ font-size: 18px; }
+    .home-desc{ font-size: 13px; }
+  }
+
+  @media (max-width: 480px){
+    .home-content{ padding: 0 16px; }
+    .home-title{ font-size: 17px; margin-bottom: 10px; }
+    .home-desc{ font-size: 12.5px; }
+  }
+
+  @media (max-width: 340px){
+    .home-title{ font-size: 15px; }
+    .home-desc{ font-size: 11.5px; }
+  }
+
+  @media (orientation: landscape) and (max-height: 480px){
+    .home-title{ font-size: 18px; margin-bottom: 8px; }
+    .home-desc{ font-size: 13px; }
+  }
+
+</style>
 </head>
-
 <body>
 
-<header class="navbar">
+<!-- ===================== NAVBAR ===================== -->
+<header class="site-header" id="siteHeader">
+  <div class="brand">ANKMARK</div>
 
-<div class="nav-container">
-
-<div class="logo">
-<a href="index.html"><img src="img/anklogo.png" alt="Logo"></a>
-</div>
-
-<nav class="nav-links" id="navLinks">
-<a href="contact.html">contact</a>
-</nav>
-
-<div class="menu-toggle" id="menuToggle">
-<span></span>
-<span></span>
-<span></span>
-</div>
-
-</div>
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-item active" data-page="Home">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="21" x2="6" y2="3" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M6 4 L15 7 L6 10 Z" fill="#e74c3c"/>
+        <ellipse cx="6" cy="21.5" rx="5" ry="1.3" fill="#2e7d32" opacity="0.6"/>
+      </svg>
+      <span>Home</span>
+    </a>
+    <a href="about.html" class="nav-item" data-page="Coming Soon">
+      <span>Coming Soon</span>
+    </a>
+  </nav>
 </header>
-<main>
 
-<section class="hero">
-
-<video autoplay muted loop playsinline class="bg-video">
-<source src="img/home.mp4" type="video/mp4">
-</video>
-
-<div class="hero-overlay"></div>
-
-<div class="hero-text">
-
-<p class="studio-name">ANKMARK STUDIO.</p>
-
-<h1>
- Ankmark is a digital studio specializing in AI content, filmmaking, and brand identity, 
- helping businesses build memorable brands through strategic storytelling and timeless visual design. | Coming soon -
-</h1>
-</div>
-
-
+<!-- ===================== HOME / HERO SECTION ===================== -->
+<section class="hero" id="home">
+  <video autoplay muted loop playsinline>
+    <source src="img/home.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="home-content">
+    <div class="home-title">ANKMARK STUDIO</div>
+    <div class="home-desc">We help businesses grow with high-quality - Filming | AI Content | Branding.</div>
+  </div>
 </section>
-</main>
 
-<script src="script.js"></script>
+<script>
+  // Sticky navbar: add "scrolled" style once user scrolls past the hero a bit
+  const header = document.getElementById('siteHeader');
+
+  function handleScroll(){
+    if (window.scrollY > 60) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+  window.addEventListener('scroll', handleScroll);
+  handleScroll();
+
+  // Nav item active state, based on current page
+  const navItems = document.querySelectorAll('.nav-item');
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+  navItems.forEach(item => {
+    const isCurrent = item.getAttribute('href') === currentPage;
+    item.classList.remove('active');
+    const icon = item.querySelector('.nav-icon');
+    if (icon) icon.remove();
+
+    if (isCurrent) {
+      item.classList.add('active');
+      if (item.dataset.page === 'Home' && !item.querySelector('.nav-icon')) {
+        const wrapper = document.createElement('span');
+        wrapper.innerHTML = `<svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;">
+            <line x1="6" y1="21" x2="6" y2="3" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M6 4 L15 7 L6 10 Z" fill="#e74c3c"/>
+            <ellipse cx="6" cy="21.5" rx="5" ry="1.3" fill="#2e7d32" opacity="0.6"/>
+          </svg>`;
+        item.prepend(wrapper.firstElementChild);
+      }
+    }
+  });
+</script>
 
 </body>
 </html>
